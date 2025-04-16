@@ -2313,11 +2313,11 @@ label(code)
 label(return)
 
 newmem:
-  cmp [rdx+rcx*4+20],#2500 // checks for min value XP
+  cmp [rdx+rcx*4+20],#2500
   jl code
-  cmp [rdx+rcx*4+20],#400000 // checks for max value XP
+  cmp [rdx+rcx*4+20],#4000000  // increase max cap to allow 1.4M XP
   jg code
-  mov [rdx+rcx*4+20],#5
+  mov [rdx+rcx*4+20],#1442850  // set XP for level 42
   jmp code
 
 code:
@@ -2329,41 +2329,6 @@ playerXP:
 return:
 registersymbol(playerXP)
 
-[DISABLE]
-
-playerXP:
-  db 44 03 4C 8A 20
-
-unregistersymbol(playerXP)
-dealloc(newmem)
-
-{
-// ORIGINAL CODE - INJECTION POINT: Project.dll+3D30C3C
-
-Project.dll+3D30C20: 41 3B D2        - cmp edx,r10d
-Project.dll+3D30C23: 7D 2A           - jnl Project.dll+3D30C4F
-Project.dll+3D30C25: 41 3B 40 18     - cmp eax,[r8+18]
-Project.dll+3D30C29: 73 3D           - jae Project.dll+3D30C68
-Project.dll+3D30C2B: 49 8B 50 10     - mov rdx,[r8+10]
-Project.dll+3D30C2F: 48 85 D2        - test rdx,rdx
-Project.dll+3D30C32: 74 28           - je Project.dll+3D30C5C
-Project.dll+3D30C34: 3B 42 18        - cmp eax,[rdx+18]
-Project.dll+3D30C37: 73 29           - jae Project.dll+3D30C62
-Project.dll+3D30C39: 48 63 C8        - movsxd  rcx,eax
-// ---------- INJECTING HERE ----------
-Project.dll+3D30C3C: 44 03 4C 8A 20  - add r9d,[rdx+rcx*4+20]
-// ---------- DONE INJECTING  ----------
-Project.dll+3D30C41: 49 63 D1        - movsxd  rdx,r9d
-Project.dll+3D30C44: 48 3B D7        - cmp rdx,rdi
-Project.dll+3D30C47: 7F 08           - jg Project.dll+3D30C51
-Project.dll+3D30C49: FF C0           - inc eax
-Project.dll+3D30C4B: 8B D0           - mov edx,eax
-Project.dll+3D30C4D: EB D1           - jmp Project.dll+3D30C20
-Project.dll+3D30C4F: B0 64           - mov al,64
-Project.dll+3D30C51: 48 8B 5C 24 30  - mov rbx,[rsp+30]
-Project.dll+3D30C56: 48 83 C4 20     - add rsp,20
-Project.dll+3D30C5A: 5F              - pop rdi
-}
 </AssemblerScript>
             </DevilEntry>
           </DevilEntries>
